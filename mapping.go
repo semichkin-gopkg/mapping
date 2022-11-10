@@ -40,16 +40,36 @@ func New[L, R comparable](
 }
 
 func (m *Mapping[L, R]) ToRight(from L) R {
-	if r, ok := m.left[from]; ok {
-		return r
+	if m.configuration.LeftComparator == nil {
+		if right, ok := m.left[from]; ok {
+			return right
+		}
+
+		return m.configuration.DefaultRight
+	}
+
+	for left, right := range m.left {
+		if m.configuration.LeftComparator(from, left) {
+			return right
+		}
 	}
 
 	return m.configuration.DefaultRight
 }
 
 func (m *Mapping[L, R]) ToLeft(from R) L {
-	if l, ok := m.right[from]; ok {
-		return l
+	if m.configuration.RightComparator == nil {
+		if left, ok := m.right[from]; ok {
+			return left
+		}
+
+		return m.configuration.DefaultLeft
+	}
+
+	for right, left := range m.right {
+		if m.configuration.RightComparator(from, right) {
+			return left
+		}
 	}
 
 	return m.configuration.DefaultLeft
