@@ -39,6 +39,11 @@ func New[L, R comparable](
 	}
 }
 
+func (m *Mapping[L, R]) Set(left L, right R) {
+	m.left[left] = right
+	m.right[right] = left
+}
+
 func (m *Mapping[L, R]) ToRight(from L) R {
 	if m.configuration.LeftComparator == nil {
 		if right, ok := m.left[from]; ok {
