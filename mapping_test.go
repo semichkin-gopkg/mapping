@@ -6,13 +6,13 @@ import (
 	"testing"
 )
 
-var cases = map[int]string{
-	0: "0",
-	1: "1",
-	2: "2",
-}
-
 func TestMapping_ToRight(t *testing.T) {
+	var cases = map[int]string{
+		0: "0",
+		1: "1",
+		2: "2",
+	}
+
 	mapping := New(cases)
 
 	for left, right := range cases {
@@ -30,6 +30,12 @@ func TestMapping_ToRight(t *testing.T) {
 }
 
 func TestMapping_ToLeft(t *testing.T) {
+	var cases = map[int]string{
+		0: "0",
+		1: "1",
+		2: "2",
+	}
+
 	mapping := New(cases)
 
 	for left, right := range cases {
@@ -47,6 +53,12 @@ func TestMapping_ToLeft(t *testing.T) {
 }
 
 func TestWithDefaultRight(t *testing.T) {
+	var cases = map[int]string{
+		0: "0",
+		1: "1",
+		2: "2",
+	}
+
 	defaultRight := "default"
 
 	mapping := New(cases, WithDefaultRight[int, string](defaultRight))
@@ -64,6 +76,12 @@ func TestWithDefaultRight(t *testing.T) {
 }
 
 func TestWithDefaultLeft(t *testing.T) {
+	var cases = map[int]string{
+		0: "0",
+		1: "1",
+		2: "2",
+	}
+
 	defaultLeft := 100
 
 	mapping := New(cases, WithDefaultLeft[int, string](defaultLeft))
@@ -81,6 +99,12 @@ func TestWithDefaultLeft(t *testing.T) {
 }
 
 func TestWithLeftComparator(t *testing.T) {
+	var cases = map[int]string{
+		0: "0",
+		1: "1",
+		2: "2",
+	}
+
 	mapping := New(cases, WithLeftComparator[int, string](func(a, b int) bool {
 		if a == b {
 			return true
@@ -117,6 +141,12 @@ func TestWithLeftComparator(t *testing.T) {
 }
 
 func TestWithRightComparator(t *testing.T) {
+	var cases = map[int]string{
+		0: "0",
+		1: "1",
+		2: "2",
+	}
+
 	mapping := New(cases, WithRightComparator[int, string](func(a, b string) bool {
 		if a == b {
 			return true
@@ -146,5 +176,77 @@ func TestWithRightComparator(t *testing.T) {
 				),
 			)
 		}
+	}
+}
+
+func TestMapping_Lefts(t *testing.T) {
+	var cases = map[int]string{
+		0: "0",
+		1: "1",
+		2: "2",
+	}
+
+	mapping := New(cases, WithDefaultLeft[int, string](4))
+
+	if len(mapping.Lefts()) != 3 {
+		t.Errorf(
+			"quantity of Lefts must be equal %d, got: %d",
+			3,
+			len(mapping.Lefts()),
+		)
+	}
+
+	mapping.Set(0, "5")
+	if len(mapping.Lefts()) != 3 {
+		t.Errorf(
+			"after setting an existing left, quantity of Lefts must be equal %d, got: %d",
+			3,
+			len(mapping.Lefts()),
+		)
+	}
+
+	mapping.Set(5, "5")
+	if len(mapping.Lefts()) != 4 {
+		t.Errorf(
+			"after setting an non-existing left, quantity of Lefts must be equal %d, got: %d",
+			4,
+			len(mapping.Lefts()),
+		)
+	}
+}
+
+func TestMapping_Rights(t *testing.T) {
+	var cases = map[int]string{
+		0: "0",
+		1: "1",
+		2: "2",
+	}
+
+	mapping := New(cases, WithDefaultRight[int, string]("4"))
+
+	if len(mapping.Rights()) != 3 {
+		t.Errorf(
+			"quantity of Rights must be equal %d, got: %d",
+			3,
+			len(mapping.Rights()),
+		)
+	}
+
+	mapping.Set(5, "0")
+	if len(mapping.Rights()) != 3 {
+		t.Errorf(
+			"after setting an existing right, quantity of Rights must be equal %d, got: %d",
+			3,
+			len(mapping.Rights()),
+		)
+	}
+
+	mapping.Set(5, "5")
+	if len(mapping.Rights()) != 4 {
+		t.Errorf(
+			"after setting an non-existing right, quantity of Rights must be equal %d, got: %d",
+			4,
+			len(mapping.Rights()),
+		)
 	}
 }

@@ -79,3 +79,19 @@ func (m *Mapping[L, R]) ToLeft(from R) L {
 
 	return m.configuration.DefaultLeft
 }
+
+func (m *Mapping[L, R]) Lefts() []L {
+	lefts := make([]L, 0, len(m.left))
+	for l := range m.left {
+		lefts = append(lefts, l)
+	}
+	return lefts
+}
+
+func (m *Mapping[L, R]) Rights() []R {
+	rights := make([]R, 0, len(m.right))
+	for r := range m.right {
+		rights = append(rights, r)
+	}
+	return rights
+}
