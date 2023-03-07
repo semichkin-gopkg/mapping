@@ -1,7 +1,7 @@
 package mapping
 
 import (
-	"github.com/semichkin-gopkg/configurator"
+	"github.com/semichkin-gopkg/conf"
 )
 
 type Mapping[L, R comparable] struct {
@@ -13,18 +13,18 @@ type Mapping[L, R comparable] struct {
 
 func New[L, R comparable](
 	left map[L]R,
-	updaters ...configurator.Updater[Configuration[L, R]],
+	updaters ...conf.Updater[Configuration[L, R]],
 ) *Mapping[L, R] {
 	var defaultL L
 	var defaultR R
 
-	configuration := configurator.New[Configuration[L, R]]().
+	configuration := conf.NewBuilder[Configuration[L, R]]().
 		Append(
 			WithDefaultLeft[L, R](defaultL),
 			WithDefaultRight[L, R](defaultR),
 		).
 		Append(updaters...).
-		Apply()
+		Build()
 
 	right := map[R]L{}
 
