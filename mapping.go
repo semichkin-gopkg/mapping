@@ -18,7 +18,7 @@ func New[L, R comparable](
 	var defaultL L
 	var defaultR R
 
-	configuration := conf.NewBuilder[Configuration[L, R]]().
+	configuration := conf.New[Configuration[L, R]]().
 		Append(
 			WithDefaultLeft[L, R](defaultL),
 			WithDefaultRight[L, R](defaultR),
